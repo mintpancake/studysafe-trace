@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
+from django.views.generic import TemplateView
 import requests
 import json
 
 
 # Create your views here.
-class InfectiousVenues(APIView):
+class InfectiousVenues(TemplateView):
+    template_name = "venues.html"
 
-    def get(self, request, hku_id, date, format=None):
+    def get_context_data(self, **kwargs):
+        hku_id = self.kwargs['hku_id']
+        date = self.kwargs['date']
 
         url = "http://blooming-beach-58892.herokuapp.com/api/trace/visits/" + hku_id + "/" + date
         response = requests.get(url)
@@ -23,12 +26,15 @@ class InfectiousVenues(APIView):
             context = {"venues": venues,
                        "subject": hku_id,
                        "date": date}
-            return render(request, 'venues.html', context=context)
+            return context
 
 
-class CloseContacts(APIView):
+class CloseContacts(TemplateView):
+    template_name = "contacts.html"
 
-    def get(self, request, hku_id, date, format=None):
+    def get_context_data(self, **kwargs):
+        hku_id = self.kwargs['hku_id']
+        date = self.kwargs['date']
 
         url = "http://blooming-beach-58892.herokuapp.com/api/trace/contacts/" + hku_id + "/" + date
         response = requests.get(url)
@@ -45,4 +51,4 @@ class CloseContacts(APIView):
                        "subject": hku_id,
                        "date": date
                        }
-            return render(request, 'contacts.html', context=context)
+            return context
