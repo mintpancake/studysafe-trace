@@ -9,12 +9,15 @@ class InfectiousVenues(TemplateView):
     template_name = "venues.html"
 
     def get_context_data(self, **kwargs):
-        hku_id = self.kwargs['hku_id']
-        date = self.kwargs['date']
+        hku_id = self.kwargs.get('hku_id')
+        date = self.kwargs.get('date')
 
         url = "http://blooming-beach-58892.herokuapp.com/api/trace/visits/" + hku_id + "/" + date
-        response = requests.get(url)
-        result = response.json()
+        try:
+            response = requests.get(url)
+            result = response.json()
+        except (requests.exceptions.RequestException, json.decoder.JSONDecodeError):
+            return {}
 
         if response.status_code == 200:
             venues = []
@@ -23,22 +26,28 @@ class InfectiousVenues(TemplateView):
                     venues.append(result[i]["venue"])
 
             venues.sort()
-            context = {"venues": venues,
-                       "subject": hku_id,
-                       "date": date}
+            context = {
+                "venues": venues,
+                "subject": hku_id,
+                "date": date,
+            }
             return context
+        return {}
 
 
 class CloseContacts(TemplateView):
     template_name = "contacts.html"
 
     def get_context_data(self, **kwargs):
-        hku_id = self.kwargs['hku_id']
-        date = self.kwargs['date']
+        hku_id = self.kwargs.get('hku_id')
+        date = self.kwargs.get('date')
 
         url = "http://blooming-beach-58892.herokuapp.com/api/trace/contacts/" + hku_id + "/" + date
-        response = requests.get(url)
-        result = response.json()
+        try:
+            response = requests.get(url)
+            result = response.json()
+        except (requests.exceptions.RequestException, json.decoder.JSONDecodeError):
+            return {}
 
         if response.status_code == 200:
             contacts = []
@@ -47,8 +56,10 @@ class CloseContacts(TemplateView):
                     contacts.append(result[i]["hku_id"])
 
             contacts.sort()
-            context = {"contacts": contacts,
-                       "subject": hku_id,
-                       "date": date
-                       }
+            context = {
+                "contacts": contacts,
+                "subject": hku_id,
+                "date": date,
+            }
             return context
+        return {}
