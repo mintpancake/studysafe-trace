@@ -24,10 +24,10 @@ env.read_env()
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%#wr-%v&rcv91k3helyzd@=*ubopex$u=t2tk=$4jrp46lrlal'
+SECRET_KEY = env.str('QDD_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['powerful-anchorage-23039.herokuapp.com', 'localhost', '127.0.0.1']
 
