@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 django = "~=4.0"
 requests = "*"
+gunicorn = "*"
+whitenoise = "*"
+psycopg2-binary = "*"
+environs = {extras = ["django"], version = "*"}
 
 [dev-packages]
 
